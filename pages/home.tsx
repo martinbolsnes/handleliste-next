@@ -80,7 +80,7 @@ const Home = () => {
   };
   return (
     <div className='flex flex-col h-full items-center max-w-md w-full'>
-      <div className='flex mt-12 items-center justify-center relative w-full pb-2 border-b-2 border-zinc-800/10 fixed'>
+      <div className='flex mt-12 items-center justify-center bg-greenPrimary w-full pb-2 h-30 border-b-2 border-zinc-800/10 fixed z-50'>
         <h1 className='font-heading text-3xl text-yellowPrimary'>
           Handleliste
         </h1>
@@ -91,7 +91,7 @@ const Home = () => {
           onClick={Logout}
         />
       </div>
-      <div className='flex flex-col w-full h-3/4 overflow-auto border-b-2 border-zinc-800/10'>
+      <div className='mt-24 flex flex-col w-full h-3/4 overflow-auto border-b-2 border-zinc-800/10'>
         <ul>
           {groceriesList.map((grocery) => (
             <li
