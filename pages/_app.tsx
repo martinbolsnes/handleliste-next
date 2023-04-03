@@ -1,6 +1,12 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
-
+import '@/styles/globals.css';
+import type { AppProps } from 'next/app';
+import { AuthContextProvider } from '../store/auth.context';
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <AuthContextProvider>
+      <div className='bg-greenPrimary h-screen w-screen flex flex-col items-center'>
+        <Component {...pageProps} />
+      </div>
+    </AuthContextProvider>
+  );
 }
