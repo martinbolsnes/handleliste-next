@@ -100,7 +100,8 @@ const Home = () => {
             >
               <div className='flex items-center justify-center'>
                 <input
-                  className='mr-6 h-4 w-4'
+                  id='input'
+                  className='mr-6 h-6 w-6'
                   type='checkbox'
                   checked={grocery.completed}
                   onChange={(e) =>
