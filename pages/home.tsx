@@ -80,18 +80,18 @@ const Home = () => {
   };
   return (
     <div className='flex flex-col h-full items-center max-w-md w-full'>
-      <div className='flex mt-12 items-center justify-center bg-greenPrimary w-full pb-2 h-30 border-b-2 border-zinc-800/10 fixed z-50'>
+      <div className='flex items-center justify-center bg-greenPrimary w-full pb-2 pt-12 border-b-2 border-zinc-800/10 fixed z-50'>
         <h1 className='font-heading text-3xl text-yellowPrimary'>
           Handleliste
         </h1>
         <FiLogOut
           color='#ddea90'
           size={30}
-          className='absolute right-4 top-0'
+          className='absolute right-4 top-12'
           onClick={Logout}
         />
       </div>
-      <div className='mt-24 flex flex-col w-full h-3/4 overflow-auto border-b-2 border-zinc-800/10'>
+      <div className='mt-24 flex flex-col w-full h-3/4 overflow-auto'>
         <ul>
           {groceriesList.map((grocery) => (
             <li
@@ -118,7 +118,7 @@ const Home = () => {
           ))}
         </ul>
       </div>
-      <div className='flex w-full justify-between items-center px-4 mt-6'>
+      <div className='flex w-full justify-between items-center px-4 pt-6 fixed bottom-6 border-t-2 border-zinc-800/10'>
         <input
           placeholder='Legg til...'
           className='w-3/4 font-sans px-4 py-4 mr-2 ml-2 h-12 bg-zinc-100 rounded-md'
