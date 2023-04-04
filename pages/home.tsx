@@ -119,7 +119,7 @@ const Home = () => {
           ))}
         </ul>
       </div>
-      <div className='flex w-full max-w-md bg-greenPrimary justify-between items-center px-4 pt-6 fixed bottom-6 border-t-2 border-zinc-800/10'>
+      <div className='flex w-full max-w-md bg-greenPrimary justify-between items-center px-4 pt-6 pb-4 fixed bottom-6 border-t-2 border-zinc-800/10'>
         <input
           placeholder='Legg til...'
           className='w-3/4 font-sans px-4 py-4 mr-2 ml-2 h-12 bg-zinc-100 rounded-md'
