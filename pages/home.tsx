@@ -40,7 +40,6 @@ const Home = () => {
       }
     });
 
-    // Cleanup subscription on unmount
     return () => {
       unsubscribe();
     };
@@ -74,23 +73,13 @@ const Home = () => {
   }, [user]);
 
   const addGrocerieItem = async () => {
-    console.log('currentUser:', auth.currentUser);
-    console.log('grocery data:', {
-      title: grocerieItem,
-      completed: false,
-      userId: user?.uid,
-    });
-    console.log('before addDoc');
     try {
       const docRef = await addDoc(collection(db, 'groceries'), {
         title: grocerieItem,
         completed: false,
         userId: user?.uid,
       });
-      console.log('after addDoc');
-    } catch (error) {
-      console.error('Error adding document: ', error);
-    }
+    } catch (error) {}
     setGroceriesItem('');
   };
 
