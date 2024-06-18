@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
+import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
   collection,
   addDoc,
@@ -8,6 +8,7 @@ import {
   doc,
   onSnapshot,
   updateDoc,
+  getDoc,
 } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 import firestore from '../firebase/config/firebase.config';
@@ -28,38 +29,68 @@ const Home = () => {
   const router = useRouter();
   const auth = getAuth(firestore);
   const db = getFirestore(firestore);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const groceriesQuery = query(
-      collection(db, 'groceries'),
-      where('userId', '==', auth.currentUser?.uid)
-    );
-
-    const unsubscribe = onSnapshot(groceriesQuery, (snapshot) => {
-      const fetchedGroceries: Grocery[] = [];
-      snapshot.forEach((doc) => {
-        const grocery = {
-          id: doc.id,
-          title: doc.data().title,
-          completed: doc.data().completed,
-          userId: doc.data().userId,
-        };
-        fetchedGroceries.push(grocery);
-      });
-      setGroceriesList(fetchedGroceries);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
     });
 
+    // Cleanup subscription on unmount
     return () => {
       unsubscribe();
     };
-  }, [db, auth.currentUser?.uid]);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const groceriesQuery = query(
+        collection(db, 'groceries'),
+        where('userId', '==', user.uid)
+      );
+
+      const unsubscribe = onSnapshot(groceriesQuery, (snapshot) => {
+        const fetchedGroceries: Grocery[] = [];
+        snapshot.forEach((doc) => {
+          const grocery = {
+            id: doc.id,
+            title: doc.data().title,
+            completed: doc.data().completed,
+            userId: doc.data().userId,
+          };
+          fetchedGroceries.push(grocery);
+        });
+        setGroceriesList(fetchedGroceries);
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [user]);
 
   const addGrocerieItem = async () => {
-    const doc = await addDoc(collection(db, 'groceries'), {
+    console.log('currentUser:', auth.currentUser);
+    console.log('grocery data:', {
       title: grocerieItem,
       completed: false,
-      userId: auth.currentUser?.uid,
+      userId: user?.uid,
     });
+    console.log('before addDoc');
+    try {
+      const docRef = await addDoc(collection(db, 'groceries'), {
+        title: grocerieItem,
+        completed: false,
+        userId: user?.uid,
+      });
+      console.log('after addDoc');
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
     setGroceriesItem('');
   };
 
