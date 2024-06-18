@@ -13,6 +13,7 @@ import { getFirestore } from 'firebase/firestore';
 import firestore from '../firebase/config/firebase.config';
 import { logOut } from '../firebase/Authentification';
 import { FiLogOut, FiTrash, FiPlus } from 'react-icons/fi';
+import { query, where } from 'firebase/firestore';
 
 interface Grocery {
   id: string;
@@ -29,7 +30,12 @@ const Home = () => {
   const db = getFirestore(firestore);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'groceries'), (snapshot) => {
+    const groceriesQuery = query(
+      collection(db, 'groceries'),
+      where('userId', '==', auth.currentUser?.uid)
+    );
+
+    const unsubscribe = onSnapshot(groceriesQuery, (snapshot) => {
       const fetchedGroceries: Grocery[] = [];
       snapshot.forEach((doc) => {
         const grocery = {
@@ -46,7 +52,7 @@ const Home = () => {
     return () => {
       unsubscribe();
     };
-  }, [db]);
+  }, [db, auth.currentUser?.uid]);
 
   const addGrocerieItem = async () => {
     const doc = await addDoc(collection(db, 'groceries'), {
