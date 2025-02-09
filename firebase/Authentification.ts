@@ -1,20 +1,22 @@
+import { auth } from './config/firebase.config'; // Import the `auth` from config
 import {
-  getAuth,
   GoogleAuthProvider,
-  onAuthStateChanged,
-  signInAnonymously,
   signInWithPopup,
   signOut,
+  onAuthStateChanged,
 } from 'firebase/auth';
-import firebase from './config/firebase.config';
-
-export const auth = getAuth(firebase);
 
 export const currentUser = () => {
-  return onAuthStateChanged(auth, (user) => {});
+  return onAuthStateChanged(auth, (user) => {
+    // Handle user state changes here
+  });
 };
 
-export const signInWithGoogle = () =>
-  signInWithPopup(auth, new GoogleAuthProvider());
+export const signInWithGoogle = () => {
+  const provider = new GoogleAuthProvider();
+  return signInWithPopup(auth, provider); // Sign in using auth
+};
 
-export const logOut = () => signOut(auth);
+export const logOut = () => {
+  return signOut(auth); // Sign out using auth
+};

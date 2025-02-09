@@ -7,6 +7,7 @@ import {
   where,
 } from 'firebase/firestore';
 import axios from 'axios';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -18,10 +19,15 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig); // Firebase app instance
+
+// Get Firestore instance
 const db = getFirestore(app);
 
-export { db };
+// Get Auth instance
+const auth = getAuth(app); // Pass FirebaseApp instance here
+
+export { app, db, auth };
 
 export const syncListWithPusher = (userId: string) => {
   if (!userId) return;

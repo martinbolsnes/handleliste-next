@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
+import { User, onAuthStateChanged } from 'firebase/auth';
 import {
   collection,
   addDoc,
@@ -9,7 +9,7 @@ import {
   onSnapshot,
   updateDoc,
 } from 'firebase/firestore';
-import { db } from '../firebase/config/firebase.config';
+import { auth, db } from '../firebase/config/firebase.config';
 import { logOut } from '../firebase/Authentification';
 import { FiLogOut, FiTrash, FiPlus } from 'react-icons/fi';
 import { query, where } from 'firebase/firestore';
@@ -28,7 +28,6 @@ const Home = () => {
   const [grocerieItem, setGroceriesItem] = useState('');
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const auth = getAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
