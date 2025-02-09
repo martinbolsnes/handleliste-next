@@ -3,8 +3,12 @@ import { signInWithGoogle } from '../firebase/Authentification';
 import { useRouter } from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
 import { FiSmile } from 'react-icons/fi';
-import Lottie from 'react-lottie-player';
 import lottieJson from '../public/SNcJj53nfg.json';
+import dynamic from 'next/dynamic';
+// Import react-lottie-player dynamically, disabling SSR
+const LottiePlayer = dynamic(() => import('react-lottie-player'), {
+  ssr: false,
+});
 
 function Login() {
   const router = useRouter();
@@ -32,13 +36,13 @@ function Login() {
         </p>
       </div>
       <div>
-        <Lottie
+        <LottiePlayer
           className='-mt-28'
           play
           loop
           animationData={lottieJson}
           style={{ height: '300px', width: '300px' }}
-        ></Lottie>
+        ></LottiePlayer>
       </div>
       <div className='flex'>
         <button

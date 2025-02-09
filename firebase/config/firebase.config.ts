@@ -1,7 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-//import { getAnalytics } from "firebase/analytics";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
+import axios from 'axios';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,6 +18,26 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const firestore = initializeApp(firebaseConfig);
-//const analytics = getAnalytics(app);
-export default firestore;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+export { db };
+
+export const syncListWithPusher = (userId: string) => {
+  if (!userId) return;
+
+  // Query groceries where userId matches the logged-in user
+  const groceriesQuery = query(
+    collection(db, 'groceries'),
+    where('userId', '==', userId)
+  );
+
+  onSnapshot(groceriesQuery, (snapshot) => {
+    const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    // Notify Pusher of the changes
+    axios
+      .post('/api/pusher', { event: 'grocery-updated', data })
+      .catch(console.error);
+  });
+};
